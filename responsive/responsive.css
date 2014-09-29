@@ -15,3 +15,62 @@
  * http://www.feedthebot.com/pagespeed/combine-images-css-sprites.html
  * http://css-tricks.com/snippets/css/media-queries-for-standard-devices/
  */
+
+/* 1280 < w */
+@media only screen
+and (min-width : 1281px)
+{ 
+    .homer {
+        width:600px; 
+        height:600px; 
+        background:url(homer.jpg) 0px 0px;
+    }
+}
+
+/* 1024 < w <= 1280 */
+@media only screen
+and (min-width : 1025px)
+and (max-width : 1280px)
+{ 
+    .homer {
+        width:300px; 
+        height:300px; 
+        background:url(homer.jpg) 0px 0px;
+    }
+}
+
+/* 768 < w <= 1024 */
+@media only screen
+and (min-width : 769px) 
+and (max-width : 1024px)
+{ 
+    .homer {
+        width:300px; 
+        height:300px; 
+        background:url(homer.jpg) 300px 0px;
+    }
+}
+
+/* 480 < w <= 768 */
+@media only screen
+and (min-width : 481px) 
+and (max-width : 768px)
+{ 
+    .homer {
+        width:300px; 
+        height:300px; 
+        background:url(homer.jpg) 0px -300px;
+    }
+}
+
+/* w <= 480 */
+@media only screen
+and (max-width : 480px)
+{ 
+    .homer {
+        width:300px; 
+        height:300px; 
+        background:url(homer.jpg) 300px -300px;
+    }
+}
+
