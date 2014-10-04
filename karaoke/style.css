@@ -1,8 +1,12 @@
 body {
     text-align:center;
+    font-family:Helvetica;
 }
 
 #music_video {
-    width:50%;
+    width:20%; /* to fit the images */
+}
+
+#lyrics {
 }
 
