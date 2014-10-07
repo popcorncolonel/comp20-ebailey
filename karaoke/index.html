@@ -14,20 +14,16 @@
 <div id="lyrics"></div>
 
 <script>
-	document.getElementsByTagName("video")[0].addEventListener('play', writeLyrics);
-    var i = 0;
-    function nextLyric() {
-        var e = document.getElementById('lyrics');
-        e.innerHTML = lyrics[i++];
-    }
-    function writeLyrics() {
-        setTimeout(nextLyric, 6500); //offset for first lyric
-        setTimeout(nextLyric, 38000); //2
-        setTimeout(nextLyric, 55125); //3
-        setTimeout(nextLyric, 85000); //4 - 1:25
-        setTimeout(nextLyric, 120000); //5 - 2:00
-        setTimeout(nextLyric, 128000); //6 - 2:08
-    }
+        var video = document.getElementsByTagName("video")[0];
+        var lyricdiv = document.getElementById('lyrics');
+        video.addEventListener('timeupdate', function() {
+            if (video.currentTime > 6) lyricdiv.innerHTML = lyrics[0];
+            if (video.currentTime > 38) lyricdiv.innerHTML = lyrics[1];
+            if (video.currentTime > 55.125) lyricdiv.innerHTML = lyrics[2];
+            if (video.currentTime > 85) lyricdiv.innerHTML = lyrics[3];
+            if (video.currentTime > 120) lyricdiv.innerHTML = lyrics[4];
+            if (video.currentTime > 128) lyricdiv.innerHTML = lyrics[5];
+        });
 
 lyrics = 
 ["Oh, I could hide 'neath the wings<br>Of the bluebird as she sings.<br>The six o'clock alarm would never ring.<br>But it rings and I rise,<br>Wipe the sleep out of my eyes.<br>My shavin' razor's cold and it stings.<br>", //1
