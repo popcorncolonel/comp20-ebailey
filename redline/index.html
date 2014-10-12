@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+        <meta charset="utf-8" />
+		<title>Redline</title>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <!--
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true&amp;libraries=places"></script>
+        -->
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js"></script>
+        <link rel="stylesheet" href="style.css" type="text/css" />
+		
+		<script>
+			var myLat = 42.3553;
+			var myLng = -71.10;
+			var myOptions = {
+						zoom: 12, // The larger the zoom number, the bigger the zoom
+						center: new google.maps.LatLng(myLat, myLng),
+						mapTypeId: google.maps.MapTypeId.ROADMAP
+					};
+			var map;
+			var trainList;
+			
+			function init()
+			{
+				map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+				addTrains();
+			}
+			
+			function addTrains()
+			{
+                var req = new XMLHttpRequest();
+                req.open('GET', 'http://developer.mbta.com/lib/rthr/red.json', true);
+                req.send()
+                var response = new Object();
+                req.onreadystatechange = function() {
+                    if (req.readyState == 4 && req.status == 200) {
+                        response = JSON.parse(req.responseText);
+                    }
+                }
+                console.log(response);
+                var myLatlng2 = new google.maps.LatLng(myLat, myLng);
+                console.log(myLatlng2.toString());
+                var marker = new google.maps.Marker({
+                    position: myLatlng2,
+                    map: map,
+                    title:"Hello World!"
+                });
+                marker.setMap(map);
+             } 
+		</script>
+	</head>
+	
+	<body onload="init()">
+		<div id="map_canvas"></div>
+	</body>
+</html>
+
