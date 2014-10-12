@@ -32,7 +32,7 @@
 			{
                 var req = new XMLHttpRequest();
                 req.open('GET', 'http://developer.mbta.com/lib/rthr/red.json', true);
-                req.send()
+                req.send();
                 var response = new Object();
                 req.onreadystatechange = function() {
                     if (req.readyState == 4 && req.status == 200) {
@@ -41,14 +41,17 @@
                 }
                 console.log(response);
                 var myLatlng2 = new google.maps.LatLng(myLat, myLng);
-                console.log(myLatlng2.toString());
+                createMarker(myLatlng2, map, 'hey :-^)');
+             } 
+
+             function createMarker (latLng, map, title) {
                 var marker = new google.maps.Marker({
-                    position: myLatlng2,
+                    position: latLng,
                     map: map,
-                    title:"Hello World!"
+                    title:title
                 });
                 marker.setMap(map);
-             } 
+             }
 		</script>
 	</head>
 	
