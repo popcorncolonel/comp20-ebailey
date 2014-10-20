@@ -96,13 +96,18 @@ function writeDistList(characters, myLat, myLng) {
         var charLatlng = new google.maps.LatLng(character['loc']['latitude'],
                                                 character['loc']['longitude']);
         var dist = getDist(charLatlng, myLatlng);
-        dist_list.push(dist);
+        dist_list.push([dist, character['name']]);
     });
     console.log(dist_list);
-    dist_list.sort();
+    dist_list.sort(function(a, b) {
+        a = a[0];
+        b = b[0];
+
+        return a < b ? -1 : (a > b ? 1 : 0);
+    });
     console.log(dist_list);
     dist_list.forEach(function(dist) {
-            box.innerHTML += 'dist';
+            box.innerHTML += 'Name: ' + dist[1] + '; Dist: ' + dist[0] + '<br>';
     });
     
 }
