@@ -24,42 +24,104 @@ charmap = {
     'waldo':'images/waldo.png',
 }
 
-function char_apply(element) {
-    var name = element['name'];
-    var lat = element['loc']['latitude'];
-    var lng = element['loc']['longitude'];
-    var note = element['loc']['note'];
+function char_apply(character) {
+    var name = character['name'];
+    var lat = character['loc']['latitude'];
+    var lng = character['loc']['longitude'];
+    var note = character['loc']['note'];
     var latlng = new google.maps.LatLng(lat, lng);
     //name, lat, lng, note
     var info = 'Name: ' + name + '<br>Lat: ' + lat + '<br>Lng: ' + lng + '<br>Note: ' + note;
     createMarker(latlng, name, charmap[name], info);
 }
 
-function student_apply(element) {
-    var login = element['login'];
-    var lat = element['lat'];
-    var lng = element['lng'];
+function student_apply(student) {
+    var login = student['login'];
+    var lat = student['lat'];
+    var lng = student['lng'];
     var latlng = new google.maps.LatLng(lat, lng);
-    var timestamp = element['created_at'];
+    var timestamp = student['created_at'];
     //login, lat, lng, timestamp
     var info = 'Login: ' + login + '<br>Lat: ' + lat + '<br>Lng: ' + lng + '<br>Timestamp: ' + timestamp;
     createMarker(latlng, login, '', info);
 }
 
-function addPoints(lat, lng) {
+function drawPolylines(characters, myLat, myLng) {
+    var myLatlng = new google.maps.LatLng(myLat, myLng); 
+    characters.forEach(function(character) {
+        var charLatlng = new google.maps.LatLng(character['loc']['latitude'],
+                                                character['loc']['longitude']);
+        var path = [myLatlng, charLatlng];
+        var charPath = new google.maps.Polyline({
+            path: path,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });           
+        charPath.setMap(map);
+    });
+}
+
+Number.prototype.toRad = function() {
+    return this * Math.PI / 180;
+}
+//function restructured based on stackoverflow.com/questions/14560999
+function getDist(charLatlng, myLatlng) {
+
+    var lat2 = charLatlng.lat();
+    var lon2 = charLatlng.lng();
+    var lat1 = myLatlng.lat();
+    var lon1 = myLatlng.lng();
+
+    var R = 6371; // km 
+    var x1 = lat2-lat1;
+    var dLat = x1.toRad();  
+    var x2 = lon2-lon1;
+    var dLon = x2.toRad();  
+    var a = (Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1.toRad()) * Math.cos(lat2.toRad()) *
+        Math.sin(dLon/2) * Math.sin(dLon/2));
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; 
+
+    return d;
+}
+
+function writeDistList(characters, myLat, myLng) {
+    var myLatlng = new google.maps.LatLng(myLat, myLng); 
+    var box = document.getElementById('dist_list');
+    dist_list = [];
+    characters.forEach(function(character) {
+        var charLatlng = new google.maps.LatLng(character['loc']['latitude'],
+                                                character['loc']['longitude']);
+        var dist = getDist(charLatlng, myLatlng);
+        dist_list.push(dist);
+    });
+    console.log(dist_list);
+    dist_list.sort();
+    console.log(dist_list);
+    dist_list.forEach(function(dist) {
+            box.innerHTML += 'dist';
+    });
+    
+}
+
+function addPoints(myLat, myLng) {
     var req = new XMLHttpRequest();
     url = 'http://chickenofthesea.herokuapp.com/sendLocation';
     req.open('POST', url, true)
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    params = "lat="+lat+"&lng="+lng+"&login="+login; 
+    params = "lat="+myLat+"&lng="+myLng+"&login="+login; 
     var response = new Object();
     req.onreadystatechange = function() {
         if (req.readyState == 4 && req.status == 200) {
             response = JSON.parse(req.responseText);
             char_array = response['characters']; 
-            console.log(char_array);
             student_array = response['students'];
             char_array.forEach(char_apply);
+            drawPolylines(char_array, myLat, myLng);
+            writeDistList(char_array, myLat, myLng);
             student_array.forEach(student_apply);
         }
     }
