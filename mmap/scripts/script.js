@@ -12,7 +12,7 @@ function init(lat, lng) {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-    createMarker(myLatlng, login, 'images/star.png', 'Myself!')
+    createMarker(myLatlng, login, 'images/star.png', 'Myself!<br>Lat: ' + lat + '<br>Lng: ' + lng);
 }
 
 charmap = {
@@ -74,7 +74,7 @@ function getDist(charLatlng, myLatlng) {
     var lat1 = myLatlng.lat();
     var lon1 = myLatlng.lng();
 
-    var R = 6371; // km 
+    var R = 3961; // miles 
     var x1 = lat2-lat1;
     var dLat = x1.toRad();  
     var x2 = lon2-lon1;
@@ -85,7 +85,12 @@ function getDist(charLatlng, myLatlng) {
     var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
     var d = R * c; 
 
-    return d;
+    return Math.round(d*100)/100; //round
+}
+
+function pan(lat, lng) {
+    var Latlng = new google.maps.LatLng(lat, lng); 
+    map.panTo(Latlng);
 }
 
 function writeDistList(characters, myLat, myLng) {
@@ -96,18 +101,17 @@ function writeDistList(characters, myLat, myLng) {
         var charLatlng = new google.maps.LatLng(character['loc']['latitude'],
                                                 character['loc']['longitude']);
         var dist = getDist(charLatlng, myLatlng);
-        dist_list.push([dist, character['name']]);
+        dist_list.push([dist, character['name'], charLatlng]);
     });
     console.log(dist_list);
     dist_list.sort(function(a, b) {
         a = a[0];
         b = b[0];
-
         return a < b ? -1 : (a > b ? 1 : 0);
     });
     console.log(dist_list);
     dist_list.forEach(function(dist) {
-            box.innerHTML += 'Name: ' + dist[1] + '; Dist: ' + dist[0] + '<br>';
+            box.innerHTML += 'Name: <a href="javascript:;" onclick="pan('+dist[2].lat()+', '+dist[2].lng()+');">' + dist[1] + '</a>; Dist: ' + dist[0] + ' miles<br>';
     });
     
 }

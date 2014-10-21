@@ -5,8 +5,11 @@ Everything has been implemented to the best of my knowledge.
 I did not discuss this assignment with anyone.
 
 **Say approximately how many hours you have spent completing the assignment.**  
-2
+3
 
 
 #TODO#
-What do I write for my own info window? "display info window after retrieving information from navigator.geolocation."
+* What do I write for my own info window? "display info window after retrieving information from navigator.geolocation."
+* Remove app engine stuff
+* Read all the piazza posts
+* Error handling (remove all console.logs)
