@@ -100,18 +100,21 @@ function writeDistList(characters, myLat, myLng) {
     characters.forEach(function(character) {
         var charLatlng = new google.maps.LatLng(character['loc']['latitude'],
                                                 character['loc']['longitude']);
+        var note = character['loc']['note'];
         var dist = getDist(charLatlng, myLatlng);
-        dist_list.push([dist, character['name'], charLatlng]);
+        dist_list.push([dist, character['name'], charLatlng, note]);
     });
-    console.log(dist_list);
     dist_list.sort(function(a, b) {
         a = a[0];
         b = b[0];
         return a < b ? -1 : (a > b ? 1 : 0);
     });
-    console.log(dist_list);
+    box.innerHTML += '<span class="title">Characters</span><br/>';
     dist_list.forEach(function(dist) {
-            box.innerHTML += 'Name: <a href="javascript:;" onclick="pan('+dist[2].lat()+', '+dist[2].lng()+');">' + dist[1] + '</a>; Dist: ' + dist[0] + ' miles<br>';
+            box.innerHTML += '<a href="javascript:;" onclick="pan('+dist[2].lat()+', '+dist[2].lng()+');">' + dist[1] + '</a> is ' + dist[0] + ' miles away from you';
+            if (dist[1] == 'carmen')
+                box.innerHTML += ' ('+dist[3]+')';
+            box.innerHTML += '.<br/>';
     });
     
 }
