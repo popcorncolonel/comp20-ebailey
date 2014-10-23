@@ -19,15 +19,33 @@
       function logMessage(element) {
           var input = element.target.value;
           var timestamp = Date.now();
-          var value = timestamp + ' - ' + input;
+          time = new Date(0);
+          time.setUTCMilliseconds(timestamp);
+          var value = time + ' - ' + input;
           localStorage[timestamp] = value;
-          $('#news')[0].innerHTML += '<br>' + value;
+          $('#news').append('<br>' + value);
+          element.target.value = '';
       }
 
       function loadMessages() {
-          for(var i in localStorage) {
-              $('#news')[0].innerHTML += '<br>' + localStorage[i];
+          var times = [];
+              localStorage[0] = ':)';
+          for(var utcsec in localStorage) {
+              var time = new Date(0);
+              time.setUTCMilliseconds(utcsec);
+              if (time == 'Invalid Date') {
+                  continue;
+              } else if (utcsec < 10) {
+                  continue;
+              }
+
+              var time = localStorage[utcsec].split(' - ')[0];
+              var message = localStorage[utcsec].split(' - ').slice(1).join(' - ');
+              times.push([time, message]);
           }
+          $.each(times, function(i, time) {
+              $('#news').append('<br>' + time[0] + ' - ' + time[1]);
+          });
       }
 
 	</script>
