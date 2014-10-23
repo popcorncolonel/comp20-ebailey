@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>My News Feed</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script>
+
+      $(document).ready(function() {
+          $('#msg').keypress(function(e) {
+              if (e.keyCode == 13) {
+                  logMessage(e);
+              }
+          });
+          loadMessages();
+      });
+
+      function logMessage(element) {
+          var input = element.target.value;
+          var timestamp = Date.now();
+          var value = timestamp + ' - ' + input;
+          localStorage[timestamp] = value;
+          $('#news')[0].innerHTML += '<br>' + value;
+      }
+
+      function loadMessages() {
+          for(var i in localStorage) {
+              $('#news')[0].innerHTML += '<br>' + localStorage[i];
+          }
+      }
+
+	</script>
+</head>
+
+<body>
+	<h1>My News Feed</h1>
+	<h3>My news update: <input type="text" id="msg" name="msg" value="" size="30"/></h3>
+	<div id="news">News...</div>
+</body>
+</html>
