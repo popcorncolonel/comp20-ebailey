@@ -17,19 +17,22 @@
       });
 
       function logMessage(element) {
+          if ($('#news')[0].innerHTML == 'News...') {
+              $('#news')[0].innerHTML = '';
+          }
           var input = element.target.value;
           var timestamp = Date.now();
           time = new Date(0);
           time.setUTCMilliseconds(timestamp);
           var value = time + ' - ' + input;
           localStorage[timestamp] = value;
-          $('#news').append('<br>' + value);
+          $('#news').prepend('<br>' + value);
           element.target.value = '';
       }
 
       function loadMessages() {
           var times = [];
-              localStorage[0] = ':)';
+          $('#news')[0].innerHTML = '';
           for(var utcsec in localStorage) {
               var time = new Date(0);
               time.setUTCMilliseconds(utcsec);
@@ -44,8 +47,11 @@
               times.push([time, message]);
           }
           $.each(times, function(i, time) {
-              $('#news').append('<br>' + time[0] + ' - ' + time[1]);
+              $('#news').prepend('<br>' + time[0] + ' - ' + time[1]);
           });
+          if ($('#news')[0].innerHTML == '') {
+              $('#news')[0].innerHTML = 'News...';
+          }
       }
 
 	</script>

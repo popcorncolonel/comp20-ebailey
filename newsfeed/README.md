@@ -1,6 +1,3 @@
-TODO: remove the http: from the beginning of jquery import
--ordering
-
 **Identify what aspects of the work have been correctly implemented and what have not.**  
 Everything has been implemented to the best of my knowledge.
 
