@@ -48,7 +48,7 @@ This web application has many potentially devastating security issues that can e
     </ul>
     <br>
 
-    <span>2. Improper use of URL parameters</span>
+    <span>2. Improper use of URL parameters (Request Injection Attack)</span>
     <ul>
         <li>Location</li>
         /locations.json
@@ -58,9 +58,9 @@ This web application has many potentially devastating security issues that can e
         Users are able to mangle Mongo Database queries to retrieve unintended results. I found this vulnerability by finding what is possible in Mongo queries and potential ways to produce unintended database queries without a SQL databse.
         <li>Proof of vulnerability <i>(screenshot)</i></li>
         <li>Resolution</li>
-        Sanitize input for database queries. Code snippet: <br>
+        Sanitize input to not allow Mongo db query manipulation. Code snippet: <br>
         <code>
-            login = login.replace(/\[.*\]/, ''); // right before querying MongoDB <br>
+            login = login.replace(/\[.*\]/, '').replace(/\$/, ''); // right before querying MongoDB <br>
         </code>
     </ul>
     <br>
@@ -100,6 +100,7 @@ This web application has many potentially devastating security issues that can e
 
 <h2> Conclusion </h2>
 <p>
+Some recommendations: As you are writing future web programs, keep in mind vulnerabilities with each line of code you write. Keep a vigilant eye on new problems via security aggregates such as OWASP and the CVE. This will cost a slight increase in time and money (primarily in developer-hours, or security frameworks if you don't want to get your hands dirty in the security mess) taken to complete the project, but will ultimately lead to better success in the applications' well-being.
 </p>
 
 </body>
