@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Security Analysis of Jeremy Chen's Web Application (Comp20)</title>
+<title>Security Analysis of Colin Hamilton's Web Application (Comp20)</title>
 <style>
 li,span {
     font-weight: bold;
@@ -15,6 +15,8 @@ li,span {
 <h2> Introduction </h2>
 <p>
 The application that I am assessing the security of is meant for storing and retreiving user locations in a database. I am writing this to improve the security of this application, in order to ensure the long-term uptime and usability for legitimate users of this application.
+<br>
+Site to analyze: <a href="https://shrieking-tomb-7833.herokuapp.com/">https://shrieking-tomb-7833.herokuapp.com/</a>
 </p>
 
 <h2> Methodology </h2>
@@ -29,7 +31,7 @@ This web application has many potentially devastating security issues that can e
 
 <h2> Issues Found </h2>
 <ul>
-    <span>1. XSS on '/'</span>
+    <h3>1. XSS on '/'</h3>
     <ul>
         <li>Location</li>
         /
@@ -37,7 +39,8 @@ This web application has many potentially devastating security issues that can e
         High
         <li>Description of issue</li>
         Users are able to write javascript wrapped in a &lt;script&gt; tag which will then be rendered on other clients' browsers and run clientside on the user's machine.
-        <li>Proof of vulnerability <i>(screenshot)</i></li>
+        <li>Proof of vulnerability</li>
+        <img src="images/xss.png" alt="XSS">
         <li>Resolution</li>
         Sanitize input. Code snippet: <br>
         <code>
@@ -48,7 +51,8 @@ This web application has many potentially devastating security issues that can e
     </ul>
     <br>
 
-    <span>2. Improper use of URL parameters (Request Injection Attack)</span>
+    <hr>
+    <h3>2. Improper use of URL parameters (Request Injection Attack)</h3>
     <ul>
         <li>Location</li>
         /locations.json
@@ -56,7 +60,8 @@ This web application has many potentially devastating security issues that can e
         Low
         <li>Description of issue</li>
         Users are able to mangle Mongo Database queries to retrieve unintended results. I found this vulnerability by finding what is possible in Mongo queries and potential ways to produce unintended database queries without a SQL databse.
-        <li>Proof of vulnerability <i>(screenshot)</i></li>
+        <li>Proof of vulnerability</li>
+        <img src="images/injection.png" alt="Mongo Injection">
         <li>Resolution</li>
         Sanitize input to not allow Mongo db query manipulation. Code snippet: <br>
         <code>
@@ -65,7 +70,8 @@ This web application has many potentially devastating security issues that can e
     </ul>
     <br>
 
-    <span>3. Invalid locations allowed</span>
+    <hr>
+    <h3>3. Invalid locations allowed</h3>
     <ul>
         <li>Location</li>
         /sendLocation, /locations.json, and /
@@ -73,7 +79,8 @@ This web application has many potentially devastating security issues that can e
         Medium
         <li>Description of issue</li>
         Users are able to input numbers into the lat and lng that are not valid latitudes and longitudes (for example, 9999 lat when the max is 90)
-        <li>Proof of vulnerability <i>(screenshot)</i></li>
+        <li>Proof of vulnerability</li>
+        <img src="images/fake_location.png" alt="Invalid Location">
         <li>Resolution</li>
         Sanitize input. Code snippet: <br>
         <code>
@@ -84,18 +91,22 @@ This web application has many potentially devastating security issues that can e
     </ul>
     <br>
 
-    <span>4. MongoDB overloaded</span>
+    <hr>
+    <h3>4. Data overload causing slow performance</h3>
     <ul>
         <li>Location</li>
-        /sendLocation, /locations.json, and /
+        /sendLocation, /
         <li>Severity</li>
-        High
+        Medium
         <li>Description of issue</li>
-        Users are able to spam /sendLocation with large amounts of valid information, overloading the database, effectively DDoSing the server so other users are unable to access the website. This was found by writing a bash script to continually spam the server with valid information until MongoDB returned an error.
-        <li>Proof of vulnerability <i>(screenshot)</i></li>
+        Users are able to spam /sendLocation with large amounts of valid information, loading the database with masses of information, effectively DDoSing the server so other users are unable to access the website at reasonable speeds (it takes about 20-30 seconds to loads the entire page). This was found by writing a bash script to continually spam the server with syntactically valid information. (Bash script included in this directory). The reason this is an issue is that the website creator did not limit the database entries per user, but rather loaded <span style="font-weight:bold;">all</span> of the information onto the page when loading the main '/' directory.
+        <li>Proof of vulnerability</li>
+        <img src="images/dos_1.png" alt="DoS Proof 1">
+        <img src="images/dos_2.png" alt="DoS Proof 2">
         <li>Resolution</li>
         Limit the allowed rate of user input (to, say, 5 requests every minute per IP address). This will prevent spammers from causing too many database stores. Another solution is to dynamically clear the database when it gets too full, or increase the database possible storage space.
     </ul>
+
 </ul>
 
 <h2> Conclusion </h2>
