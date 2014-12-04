@@ -44,9 +44,9 @@ This web application has many potentially devastating security issues that can e
         <li>Resolution</li>
         Sanitize input. Code snippet: <br>
         <code>
-            login = login.replace('<', '&lt;').replace('>', '&gt;'); <br>
-            lat = lat.replace('<', '&lt;').replace('>', '&gt;'); //if lat is a string <br>
-            lng = lng.replace('<', '&lt;').replace('>', '&gt;'); //if lng is a string
+            login = login.replace('<', '&amp;lt;').replace('>', '&amp;gt;'); <br>
+            lat = lat.replace('<', '&amp;lt;').replace('>', '&amp;gt;'); //where lat is a string <br>
+            lng = lng.replace('<', '&amp;lt;').replace('>', '&amp;gt;'); //where lng is a string
         </code>
     </ul>
     <br>
@@ -84,7 +84,7 @@ This web application has many potentially devastating security issues that can e
         <li>Resolution</li>
         Sanitize input. Code snippet: <br>
         <code>
-            if (lat < 360 && lng < 360) { <br>
+            if (Number(lat) < 360 && Number(lng) < 360) { <br>
             &nbsp;&nbsp;&nbsp;&nbsp; // put data into the database <br> 
             }
         </code>
