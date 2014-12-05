@@ -4,6 +4,9 @@
 <meta charset="utf-8" />
 <title>Security Analysis of Colin Hamilton's Web Application (Comp20)</title>
 <style>
+* {
+    font-family:Helvetica;
+}
 li,span {
     font-weight: bold;
 }
@@ -12,6 +15,7 @@ li,span {
 
 <body>
 
+<hr>
 <h2> Introduction </h2>
 <p>
 The application that I am assessing the security of is meant for storing and retreiving user locations in a database. I am writing this to improve the security of this application, in order to ensure the long-term uptime and usability for legitimate users of this application.
@@ -19,16 +23,29 @@ The application that I am assessing the security of is meant for storing and ret
 Site to analyze: <a href="https://shrieking-tomb-7833.herokuapp.com/">https://shrieking-tomb-7833.herokuapp.com/</a>
 </p>
 
+<hr>
 <h2> Methodology </h2>
 <p>
-I decided to look for common vulnerabilities in many web applications (found on OWASP) and tried to abuse knowledge about MongoDB and heroku to find vulnerabilities. I used basic applications for sending requests to web servers (such as cURL, a web browser, and shell scripting).
+I decided to look for common vulnerabilities in many web applications (found on OWASP) and tried to abuse knowledge about MongoDB, Heroku, and web programming to find vulnerabilities. I used basic applications for sending requests to web servers (such as cURL, a web browser, and shell scripting).
 </p>
 
+<hr>
 <h2> Abstract of Findings </h2>
 <p>
-This web application has many potentially devastating security issues that can easily be fixed and presented in the future. For example, currently users are able to post input to the server that will render images/videos, or even redirect people from the website (see: XSS (Cross-site scripting) below). Also, users are able to give bad geolocation input, causing problems in applications reliant on /locations.json
+This web application has many potentially devastating security issues that can easily be fixed and presented in the future.
+<br>
+<br>
+For example, currently users are able to post input to the server that will render images/videos, or even redirect people from the website (see: XSS (Cross-site scripting) below).
+<br>
+Currently, users are also able to mangle database input in order to trick the MongoDB into returning information that we were not intending to show. (See: Request Injection Attack below)
+<br>
+Also, users are able to give bad geolocation input, causing problems in applications reliant on /locations.json. (See: Invalid Locations below)
+<br>
+Finally, Users are able to flood the servers with unreasonable amounts of information, causing site lag and with enough time and effort, eventual Denial of Service. (See: Data Overload below)
+
 </p>
 
+<hr>
 <h2> Issues Found </h2>
 <ul>
     <h3>1. XSS on '/'</h3>
@@ -109,10 +126,12 @@ This web application has many potentially devastating security issues that can e
 
 </ul>
 
+<hr>
 <h2> Conclusion </h2>
 <p>
 Some recommendations: As you are writing future web programs, keep in mind vulnerabilities with each line of code you write. Keep a vigilant eye on new problems via security aggregates such as OWASP and the CVE. This will cost a slight increase in time and money (primarily in developer-hours, or security frameworks if you don't want to get your hands dirty in the security mess) taken to complete the project, but will ultimately lead to better success in the applications' well-being.
 </p>
+<hr>
 
 </body>
 </html>	
